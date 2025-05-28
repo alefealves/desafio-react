@@ -20,16 +20,23 @@ const data = [
   },
 ];
 
+interface Task {
+  id: string;
+  title: string;
+  isDeleted: boolean;
+  isCompleted: boolean;
+}
+
 export function App() {
-  const [tasks, setTasks] = useState<any>();
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
   const [totalCompleted, setTotalCompleted] = useState(0)
 
   useEffect(() => {
-   setTasks(data) 
-  })
+   setTasks(data); 
+  }, []);
 
-  const handleNewTaskChange = (event: any) => {
+  const handleNewTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setNewTask(event.target.value);
   };
@@ -50,7 +57,7 @@ export function App() {
   };
 
   const completeTask = (id: string) => {
-    const tasksWithoutCompleteOne = tasks.map((task) =>
+    const tasksWithoutCompleteOne = tasks.map((task: Task) =>
       task.id === id ? { ...task, isCompleted: true } : task
     );
 
@@ -58,15 +65,15 @@ export function App() {
   };
 
   const deleteTask = (id: string) => {
-    const taskssWithoutDeleteOne = tasks.filter((task) => task.id !== id);
+    const taskssWithoutDeleteOne = tasks.filter((task: Task) => task.id !== id);
 
     setTasks(taskssWithoutDeleteOne);
   };
 
   useEffect(() => {
-    tasks.map((task) => task.isCompleted === true && setTotalCompleted(totalCompleted + 1));
-  }, [totalCompleted])
-
+  const completed = tasks.filter((task: Task) => task.isCompleted).length;
+  setTotalCompleted(completed);
+}, [tasks]);
   
 
   return (
@@ -102,15 +109,16 @@ export function App() {
           </div>
           <div className={styles.contentBox}>
             {tasks.length > 0 ? (
-              tasks.map((task) => (
-                <Task
-                  id={task.id}
-                  checked={task.isCompleted}
-                  title={task.title}
-                  onComplete={completeTask}
-                  onDelete={deleteTask}
-                />
-              ))
+              tasks.map((task: Task) => (
+                  <Task
+                    id={task.id}
+                    checked={task.isCompleted}
+                    title={task.title}
+                    onComplete={completeTask}
+                    onDelete={deleteTask}
+                  />
+                ))
+
             ) : (
               <>
                 <ClipboardText size={56} />
