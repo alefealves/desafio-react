@@ -1,7 +1,7 @@
+/* Estilo base - Desktop */
 .wrapper {
   max-width: 46rem;
   margin: auto;
-
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.5rem;
@@ -32,6 +32,7 @@
 }
 
 .newButton {
+  width: auto;
   border-radius: 8px;
   border: 0;
   cursor: pointer;
@@ -103,4 +104,21 @@
 
 .contentBox small {
   font-size: 1rem;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .newText {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newButton {
+    width: 100%;
+  }
 }
