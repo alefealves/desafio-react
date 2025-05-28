@@ -41,14 +41,15 @@ export function App() {
     setNewTask(event.target.value);
   };
 
-  const handleCreateTask = (event: any) => {
+  const handleCreateTask = (event: React.FormEvent) => {
     event.preventDefault();
+    if (!newTask.trim()) return;
 
-    setTasks([
-      ...tasks,
+    setTasks(prevTasks => [
+      ...prevTasks,
       {
         id: uuidv4(),
-        title: newTask,
+        title: newTask.trim(),
         isDeleted: false,
         isCompleted: false,
       },
@@ -57,23 +58,21 @@ export function App() {
   };
 
   const completeTask = (id: string) => {
-    const tasksWithoutCompleteOne = tasks.map((task: Task) =>
-      task.id === id ? { ...task, isCompleted: true } : task
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, isCompleted: true } : task
+      )
     );
-
-    setTasks(tasksWithoutCompleteOne);
   };
 
   const deleteTask = (id: string) => {
-    const taskssWithoutDeleteOne = tasks.filter((task: Task) => task.id !== id);
-
-    setTasks(taskssWithoutDeleteOne);
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
   };
 
   useEffect(() => {
-  const completed = tasks.filter((task: Task) => task.isCompleted).length;
-  setTotalCompleted(completed);
-}, [tasks]);
+    const completed = tasks.filter((task: any) => task.isCompleted).length;
+    setTotalCompleted(completed);
+  }, [tasks]);
   
 
   return (
@@ -82,15 +81,17 @@ export function App() {
       <main className={styles.wrapper}>
         <form className={styles.newText} onSubmit={handleCreateTask}>
           <input
+            id="newTask"
+            name="newTask" 
             type="text"
             placeholder="Adicione uma tarefa"
             value={newTask}
             onChange={handleNewTaskChange}
             required
           />
-          <button type="submit">
-            Criar
-            <PlusCircle size={20} />
+          <button type="submit" className={styles.newButton}>
+            <PlusCircle size={20} weight="bold"/>
+            Adicionar
           </button>
         </form>
         <div className={styles.content}>
@@ -111,6 +112,7 @@ export function App() {
             {tasks.length > 0 ? (
               tasks.map((task: Task) => (
                   <Task
+                    key={task.id}
                     id={task.id}
                     checked={task.isCompleted}
                     title={task.title}

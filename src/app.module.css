@@ -6,7 +6,7 @@
   grid-template-columns: 1fr;
   gap: 0.5rem;
   align-items: flex-start;
-  margin-top: -1.6875rem
+  margin-top: 2rem
 }
 
 .newText {
@@ -17,26 +17,28 @@
 
 .newText input {
   width: 100%;
-  background: var(--gray-500);
-  color: var(--gray-300);
+  background: #ffffff;
+  color: #000000;
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid var(--gray-700);
+  transition: box-shadow 0.2s;
+  border: 1px solid var(--gray-600);
 }
 
 .newText input:focus {
-  color: var(--gray-100);
+  color: #000000;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--blue-300);
 }
 
-.newText button {
+.newButton {
   border-radius: 8px;
   border: 0;
   cursor: pointer;
-  background: var(--blue-500);
-  color: var(--gray-100);
+  background: linear-gradient(140deg, #4EA8DE, #8284FA);
+  color: white;
   padding: 1rem;
   font-weight: bold;
-  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,9 +46,14 @@
   transition: background 0.1s;
 }
 
-.newText button:hover {
-  background: var(--blue-300);
+.newButton:hover {
+  background: linear-gradient(140deg, #5eb8ee, #9294fa);
 }
+
+.newButton:active {
+  transform: scale(0.98);
+}
+
 
 .content {
   margin-top: 4rem;
@@ -75,14 +82,12 @@
 .contentBox {
   border-radius: 8px;
   border-top: 1px solid var(--gray-400);
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-self: stretch;
-
-  margin-top: -66.5rem;
+  margin-top: 2rem;
   gap: 0.75rem;
 }
 

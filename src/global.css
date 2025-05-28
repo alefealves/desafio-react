@@ -38,7 +38,3 @@ body, input, textarea, button {
   font-size: 1rem;
   line-height: 1.4;
 }
-
-html body button {
-  all: unset !important;
-}
