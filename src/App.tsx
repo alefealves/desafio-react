@@ -30,14 +30,20 @@ interface Task {
 export function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
-  const [totalCompleted, setTotalCompleted] = useState(0)
 
   useEffect(() => {
    setTasks(data); 
   }, []);
 
+  const activeTasks = useMemo(() => {
+    return tasks.filter(task => !task.isDeleted);
+  }, [tasks]);
+
+  const totalCompleted = useMemo(() => {
+    return activeTasks.filter(task => task.isCompleted).length;
+  }, [activeTasks]);
+
   const handleNewTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     setNewTask(event.target.value);
   };
 
@@ -57,23 +63,21 @@ export function App() {
     setNewTask("");
   };
 
-  const completeTask = (id: string) => {
+  const completeTask = useCallback((id: string) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
         task.id === id ? { ...task, isCompleted: true } : task
       )
     );
-  };
+  }, []);
 
-  const deleteTask = (id: string) => {
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-  };
-
-  useEffect(() => {
-    const completed = tasks.filter((task: any) => task.isCompleted).length;
-    setTotalCompleted(completed);
-  }, [tasks]);
-  
+  const deleteTask = useCallback((id: string) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, isDeleted: true } : task
+      )
+    );
+  }, []);
 
   return (
     <>
@@ -89,7 +93,10 @@ export function App() {
             onChange={handleNewTaskChange}
             required
           />
-          <button type="submit" className={styles.newButton}>
+          <button 
+            type="submit" 
+            className={styles.newButton}
+            disabled={!newTask.trim()}>
             <PlusCircle size={20} weight="bold"/>
             Adicionar
           </button>
@@ -98,29 +105,28 @@ export function App() {
           <div className={styles.contentHeader}>
             <div>
               <strong>Tarefas criadas</strong>
-              <span>{tasks.length}</span>
+              <span>{activeTasks.length}</span>
             </div>
 
             <div>
               <strong>Concluídas</strong>
               <span>
-                {totalCompleted} de {tasks.length}
+                {totalCompleted} de {tasks.filter(task => !task.isDeleted).length}
               </span>
             </div>
           </div>
           <div className={styles.contentBox}>
-            {tasks.length > 0 ? (
-              tasks.map((task: Task) => (
-                  <Task
-                    key={task.id}
-                    id={task.id}
-                    checked={task.isCompleted}
-                    title={task.title}
-                    onComplete={completeTask}
-                    onDelete={deleteTask}
-                  />
-                ))
-
+            {activeTasks.length > 0 ? (
+               activeTasks.map((task: Task) => (
+                <Task
+                  key={task.id}
+                  id={task.id}
+                  checked={task.isCompleted}
+                  title={task.title}
+                  onComplete={completeTask}
+                  onDelete={deleteTask}
+                />
+              ))
             ) : (
               <>
                 <ClipboardText size={56} />
