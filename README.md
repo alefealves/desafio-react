@@ -6,7 +6,14 @@ Este repositório contém uma aplicação ReactJS propositalmente com erros de d
 
 ### Abaixo está a imagem do projeto
 
-<img src=".github/image.png" />
+Em Mobile
+<img src=".github/mobile.png" />
+
+Em Web
+<img src=".github/desktop.png" />
+
+Aplicação funcionando
+[![Assista ao vídeo](.github/mobile.png)](.github/aplicacao.mp4)
 
 ---
 
